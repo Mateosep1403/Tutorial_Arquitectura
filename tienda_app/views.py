@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, request
 from django.views import View
+from django.http import JsonResponse
 
 from .infra.factories import PaymentFactory
 from .services import CompraService
 from .models import Libro, Inventario, Orden
+
 
 import datetime
 
@@ -116,3 +118,8 @@ class CompraRapidaView(View):
             return HttpResponse("Comprado via CBV")
 
         return HttpResponse("Error", status=400)
+
+
+def lista_productos(request):
+    productos = list(Libro.objects.values('id', 'titulo', 'precio'))
+    return JsonResponse({"productos": productos})
